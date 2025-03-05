@@ -1,0 +1,59 @@
+#include <stdio.h>
+
+int divisionsuma(int dividendo, int divisor, int suma, int cociente) {
+    if (suma + divisor > dividendo)
+        return cociente;
+
+    return divisionsuma(dividendo, divisor, suma + divisor, cociente + 1);
+}
+
+int division(int dividendo, int divisor) {
+    if (divisor == 0) {
+        printf("Error: División por cero.\n");
+        return 0;
+    }
+
+    int negativo = 0; 
+
+    if ((dividendo < 0 && divisor > 0) || (dividendo > 0 && divisor < 0)) {
+        negativo = 1;
+    } else {
+        negativo = 0;
+    }
+
+    int a, b;
+    
+    if (dividendo < 0) {
+        a = -dividendo;
+    } else {
+        a = dividendo;
+    }
+
+    if (divisor < 0) {
+        b = -divisor;
+    } else {
+        b = divisor;
+    }
+
+    int cociente = divisionsuma(a, b, 0, 0);
+
+    if (negativo) {
+        return -cociente;
+    } else {
+        return cociente;
+    }
+}
+
+int main() {
+    int dividendo, divisor;
+
+    printf("Introduce el dividendo: ");
+    scanf("%d", &dividendo);
+    printf("Introduce el divisor: ");
+    scanf("%d", &divisor);
+
+    int resultado = division(dividendo, divisor);
+    printf("El cociente es: %d\n", resultado);
+
+    return 0;
+}
