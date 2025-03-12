@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_COMBINACIONES 1000
+
+char *mapeo[] = {
+    "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"
+};
+
+void generarCombinaciones(char *digitos, int indice, char *actual, char **resultado, int *contador) {
+    if (digitos[indice] == '\0') {
+        resultado[*contador] = strdup(actual);
+        (*contador)++;
+        return;
+    }
+
+    char *letras = mapeo[digitos[indice] - '0'];
+    for (int i = 0; letras[i] != '\0'; i++) {
+        actual[indice] = letras[i];
+        generarCombinaciones(digitos, indice + 1, actual, resultado, contador);
+    }
+}
+
+char **obtenerCombinaciones(char *digitos, int *tamanio) {
+    if (digitos == NULL || *digitos == '\0') {
+        *tamanio = 0;
+        return NULL;
+    }
+
+    char **resultado = (char **)malloc(MAX_COMBINACIONES * sizeof(char *));
+    char actual[strlen(digitos) + 1];
+    actual[strlen(digitos)] = '\0';
+    int contador = 0;
+
+    generarCombinaciones(digitos, 0, actual, resultado, &contador);
+
+    *tamanio = contador;
+    return resultado;
+}
+
+int main() {
+    char entrada[] = "23";
+    int tamanio;
+
+    char **combinaciones = obtenerCombinaciones(entrada, &tamanio);
+
+    printf("Posibles combinaciones de \"%s\":\n", entrada);
+    for (int i = 0; i < tamanio; i++) {
+        printf("%s\n", combinaciones[i]);
+        free(combinaciones[i]);
+    }
+    free(combinaciones);
+
+    return 0;
+}
